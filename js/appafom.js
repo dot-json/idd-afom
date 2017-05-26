@@ -23,7 +23,13 @@ app.config(function ($routeProvider, $locationProvider) {
 });
 
 app.controller("mainCtrl", function ($scope) {
-
+	// $http.get("file-data.json")
+ //    .then(function(response) {
+ //        // this callback will be called asynchronously when the response is available
+ //        $scope.units = response.data;
+ //    }, function(response) {
+ //        // called asynchronously if an error occurs or server returns response with an error status.
+ //    });
 });
 
 app.controller("detectedCtrl", function ($scope, $routeParams) {
