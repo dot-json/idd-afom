@@ -1,0 +1,128 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="page-header">
+			<h1>Fallouts</h1>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label for="input_id">Filter ID:</label>
+			<input type="text" class="form-control" id="input_id" data-ng-model="obj.id" placeholder="AFOM#####" />
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label for="input_source_system">Filter Source:</label>
+			<select class="form-control" id="input_source_system" data-ng-model="obj.source_system" >
+				<option></option>
+				<option>COM</option>
+				<option>PNI</option>
+				<option>ORDERMANAGER</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="input_source_fallout_id">Filter Source ID:</label>
+			<input type="text" class="form-control" id="input_source_fallout_id" data-ng-model="obj.source_fallout_id" placeholder="{{ obj.source_system }}#####" />
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label for="input_source_error_code">Filter Source Error Code:</label>
+			<input type="text" class="form-control" id="input_source_error_code" data-ng-model="obj.source_error_code" placeholder="ERROR####" />
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label for="input_status">Filter Status:</label>
+			<select class="form-control" id="input_status" data-ng-model="obj.status">
+				<option></option>
+				<option>CREATED</option>
+				<option>STARTED</option>
+				<option>CLOSED-SUCCESSFUL</option>
+				<option>CLOSED-FAILURE</option>
+				<option>ERROR</option>
+			</select>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12 table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th scope="col"></th>
+					<th scope="col" id="id">
+						<a href="" data-ng-click="sortType = 'id'; sortReverse = !sortReverse">
+							ID
+							<span data-ng-show="sortType == 'id' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'id' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+					<th scope="col" id="source_system">
+						<a href="" data-ng-click="sortType = 'source_system'; sortReverse = !sortReverse">
+							Source System
+							<span data-ng-show="sortType == 'source_system' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'source_system' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+					<th scope="col" id="source_fallout_id">
+						<a href="" data-ng-click="sortType = 'source_fallout_id'; sortReverse = !sortReverse">
+							Source Fallout ID
+							<span data-ng-show="sortType == 'source_fallout_id' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'source_fallout_id' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+					<th scope="col" id="source_error_code">
+						<a href="" data-ng-click="sortType = 'source_error_code'; sortReverse = !sortReverse">
+							Error Code
+							<span data-ng-show="sortType == 'source_error_code' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'source_error_code' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+					<th scope="col" id="creation_date">
+						<a href="" data-ng-click="sortType = 'creation_date'; sortReverse = !sortReverse">
+							Date Created
+							<span data-ng-show="sortType == 'creation_date' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'creation_date' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+					<th scope="col" id="due_date">
+						<a href="" data-ng-click="sortType = 'due_date'; sortReverse = !sortReverse">
+							Due Date
+							<span data-ng-show="sortType == 'due_date' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'due_date' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+					<th scope="col" id="status">
+						<a href="" data-ng-click="sortType = 'status'; sortReverse = !sortReverse">
+							Status
+							<span data-ng-show="sortType == 'status' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+							<span data-ng-show="sortType == 'status' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+						</a>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat-start="f in fallouts | orderBy:sortType:sortReverse | filter: obj">
+					<td>
+						<button type="button" class="btn btn-default btn-sm" data-ng-if="f.expanded" data-ng-click="f.expanded = false">-</button>
+						<button type="button" class="btn btn-default btn-sm" data-ng-if="!f.expanded" data-ng-click="f.expanded = true">+</button>
+					</td>
+					<td headers="id">{{ f.id }}</td>
+					<td headers="source_system">{{ f.source_system }}</td>
+					<td headers="source_fallout_id">{{ f.source_fallout_id }}</td>
+					<td headers="source_error_code">{{ f.source_error_code }}</td>
+					<td headers="creation_date">{{ f.creation_date }}</td>
+					<td headers="due_date">{{ f.due_date }}</td>
+					<td headers="status">{{ f.status }}</td>
+				</tr>
+				<tr data-ng-if="f.expanded" data-ng-repeat-end="">
+					<td></td>
+					<td colspan="7" data-ng-details="{{ f.id }}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

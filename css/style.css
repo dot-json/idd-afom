@@ -1,4 +1,8 @@
-.glyphicon.glyphicon-search, .glyphicon.glyphicon-ok, .glyphicon.glyphicon-stats {
+.glyphicon-big {
 	font-size: 50px;
 	margin-top: 50px;
+}
+
+.row {
+	margin-bottom: 25px;
 }
