@@ -48,8 +48,8 @@ app.factory("GraphData", function() {
 		for (var i = 0; i < 24; i++) {
 			var count = 0;
 
-			angular.forEach(data, function(value, key) {
-				var hour = value.creation_date.substring(11, 13);
+			angular.forEach(data, function(x) {
+				var hour = x.creation_date.substring(11, 13);
 				if (i == hour) {
 					count++;
 				} 
@@ -61,7 +61,73 @@ app.factory("GraphData", function() {
 		return falloutArray;
 	}
 
-	service.get24h = function(data) {
+	service.getStatusData = function(data) {
+		var errorCodes = [];
+
+		// populate array with error codes
+		angular.forEach(data, function(x) {
+			var code = x.status;
+
+			if (errorCodes.indexOf(code) == -1) {
+				errorCodes.push(code);
+			}
+		});
+
+		return errorCodes.sort();
+	}
+
+	service.getSystemData = function(data) {
+		var errorCodes = [];
+
+		// populate array with error codes
+		angular.forEach(data, function(x) {
+			var code = x.source_system;
+
+			if (errorCodes.indexOf(code) == -1) {
+				errorCodes.push(code);
+			}
+		});
+
+		return errorCodes.sort();
+	}
+
+	service.getFalloutsByStatus = function(data, collection) {
+		var counts = [];
+
+		angular.forEach(collection, function(x) {
+			var count = 0;
+
+			angular.forEach(data, function(y) {
+				if (y.status == x) {
+					count++;
+				}
+			});
+
+			counts.push(count);
+		});
+
+		return counts;
+	}
+
+	service.getFalloutsBySystem = function(data, collection) {
+		var counts = [];
+
+		angular.forEach(collection, function(x) {
+			var count = 0;
+
+			angular.forEach(data, function(y) {
+				if (y.source_system == x) {
+					count++;
+				}
+			});
+
+			counts.push(count);
+		});
+
+		return counts;
+	}
+
+	service.get24hArray = function() {
 		var hours = [];
 
 		for (var i = 0; i < 24; i++) {
@@ -100,16 +166,19 @@ app.controller("falloutsCtrl", function ($scope, FalloutData, GraphData) {
 	.then(function(response) {
 		// async success
 		$scope.fallouts = response.data.docs;
-		console.log(GraphData.getFalloutsVsTime($scope.fallouts));
 
-		$scope.labels = GraphData.get24h();
-		$scope.data = [GraphData.getFalloutsVsTime($scope.fallouts)];
-		$scope.series = ["Fallouts at this time"];
+		$scope.barLabels = GraphData.get24hArray();
+		$scope.barData = [GraphData.getFalloutsVsTime($scope.fallouts)];
+		$scope.barSeries = ["Fallouts at this time"];
+
+		$scope.doughnut1Labels = GraphData.getStatusData($scope.fallouts);
+		$scope.doughnut1Data = GraphData.getFalloutsByStatus($scope.fallouts, GraphData.getStatusData($scope.fallouts));
+
+		$scope.doughnut2Labels = GraphData.getSystemData($scope.fallouts);
+		$scope.doughnut2Data = GraphData.getFalloutsBySystem($scope.fallouts, GraphData.getSystemData($scope.fallouts));
 	}, function(response) { 
 		// async error
 	});
-
-	//bullshet
 	
 });
 

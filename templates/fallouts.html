@@ -5,14 +5,29 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+<!-- <div class="row">
 	<div class="col-sm-4">
-		<h2>Fallouts Against Time</h2>
+	<h2>Fallouts Per Day</h2>
 		<p>Frequency bar graph showing when fallouts are detected throughout the day</p>
 	</div>
 	<div class="col-sm-8">
-		<canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series">
-		</canvas>
+		<canvas id="bar" class="chart chart-bar" chart-data="barData" chart-labels="barLabels" chart-series="barSeries"></canvas>
+	</div>
+</div> -->
+<div class="row">
+	<div class="col-sm-3">
+		<h2>Fallouts By Status</h2>
+		<p>Hollow pie graph showing fallouts grouped by status</p>
+	</div>
+	<div class="col-sm-3">
+		<canvas id="doughnut1" class="chart chart-doughnut" chart-data="doughnut1Data" chart-labels="doughnut1Labels"></canvas> 
+	</div>
+	<div class="col-sm-3">
+		<h2>Fallouts By Source System</h2>
+		<p>Hollow pie graph showing fallouts grouped by source system</p>
+	</div>
+	<div class="col-sm-3">
+		<canvas id="doughnut2" class="chart chart-doughnut" chart-data="doughnut2Data" chart-labels="doughnut2Labels"></canvas> 
 	</div>
 </div>
 <div class="row">
