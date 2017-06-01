@@ -61,62 +61,59 @@ app.factory("GraphData", function() {
 		return falloutArray;
 	}
 
-	service.getStatusData = function(data) {
-		var errorCodes = [];
+	service.getFieldData = function(data, field) {
+		var fieldArray = [];
 
 		// populate array with error codes
 		angular.forEach(data, function(x) {
-			var code = x.status;
+			var fieldItem;
 
-			if (errorCodes.indexOf(code) == -1) {
-				errorCodes.push(code);
+			switch(field) {
+				case "status":
+					fieldItem = x.status;
+					break;
+				case "source_system":
+					fieldItem = x.source_system;
+					break;
+				case "target_system":
+					fieldItem = x.target_system;
+					break;
+				default:
+					break;
+			}
+
+			if (fieldArray.indexOf(fieldItem) == -1) {
+				fieldArray.push(fieldItem);
 			}
 		});
 
-		return errorCodes.sort();
+		return fieldArray.sort();
 	}
 
-	service.getSystemData = function(data) {
-		var errorCodes = [];
-
-		// populate array with error codes
-		angular.forEach(data, function(x) {
-			var code = x.source_system;
-
-			if (errorCodes.indexOf(code) == -1) {
-				errorCodes.push(code);
-			}
-		});
-
-		return errorCodes.sort();
-	}
-
-	service.getFalloutsByStatus = function(data, collection) {
+	service.getCountsByCollection = function(data, collection, field) {
 		var counts = [];
 
 		angular.forEach(collection, function(x) {
 			var count = 0;
 
 			angular.forEach(data, function(y) {
-				if (y.status == x) {
-					count++;
+				var fieldItem;
+
+				switch(field) {
+					case "status":
+						fieldItem = y.status;
+						break;
+					case "source_system":
+						fieldItem = y.source_system;
+						break;
+					case "target_system":
+						fieldItem = y.target_system;
+						break;
+					default:
+						break;
 				}
-			});
 
-			counts.push(count);
-		});
-
-		return counts;
-	}
-
-	service.getFalloutsBySystem = function(data, collection) {
-		var counts = [];
-
-		angular.forEach(collection, function(x) {
-			var count = 0;
-
-			angular.forEach(data, function(y) {
-				if (y.source_system == x) {
+				if (fieldItem == x) {
 					count++;
 				}
 			});
@@ -171,11 +168,11 @@ app.controller("falloutsCtrl", function ($scope, FalloutData, GraphData) {
 		$scope.barData = [GraphData.getFalloutsVsTime($scope.fallouts)];
 		$scope.barSeries = ["Fallouts at this time"];
 
-		$scope.doughnut1Labels = GraphData.getStatusData($scope.fallouts);
-		$scope.doughnut1Data = GraphData.getFalloutsByStatus($scope.fallouts, GraphData.getStatusData($scope.fallouts));
+		$scope.statusLabels = GraphData.getFieldData($scope.fallouts, "status");
+		$scope.statusData = GraphData.getFalloutsByStatus($scope.fallouts, GraphData.getFieldData($scope.fallouts, "status"), "status");
 
-		$scope.doughnut2Labels = GraphData.getSystemData($scope.fallouts);
-		$scope.doughnut2Data = GraphData.getFalloutsBySystem($scope.fallouts, GraphData.getSystemData($scope.fallouts));
+		$scope.systemLabels = GraphData.getFieldData($scope.fallouts, "source_system");
+		$scope.systemData = GraphData.getFalloutsBySystem($scope.fallouts, GraphData.getFieldData($scope.fallouts, "source_system"), "source_system");
 	}, function(response) { 
 		// async error
 	});
