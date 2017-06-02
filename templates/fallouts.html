@@ -1,33 +1,30 @@
 <div class="row">
 	<div class="col-sm-12">
 		<div class="page-header">
-			<h1>Summary</h1>
+			<h1>Fallouts Summary</h1>
 		</div>
 	</div>
 </div>
-<!-- <div class="row">
-	<div class="col-sm-4">
-	<h2>Fallouts Per Day</h2>
-		<p>Frequency bar graph showing when fallouts are detected throughout the day</p>
-	</div>
-	<div class="col-sm-8">
-		<canvas id="bar" class="chart chart-bar" chart-data="barData" chart-labels="barLabels" chart-series="barSeries"></canvas>
-	</div>
-</div> -->
+
 <div class="row">
 	<div class="col-sm-3">
 		<h2>Fallouts By Source System</h2>
 		<p>Hollow pie graph showing fallouts grouped by source system</p>
 	</div>
 	<div class="col-sm-3">
-		<canvas id="system_graph" class="chart chart-doughnut" chart-data="systemData" chart-labels="systemLabels"></canvas> 
+		<canvas id="source_system_graph" class="chart chart-doughnut" chart-data="sourceSystemData" chart-labels="sourceSystemLabels"></canvas> 
 	</div>
 	<div class="col-sm-3">
 		<h2>Fallouts By Status</h2>
-		<p>Hollow pie graph showing fallouts grouped by status</p>
+		<p>Hollow pie graph showing fallouts grouped by {{ statusGraphType }} statuses</p>
+		<p>
+			<button type="button" class="btn btn-default" data-ng-click="statusGraphType='all'">All</button>
+			<button type="button" class="btn btn-default" data-ng-click="statusGraphType='closed'">Closed</button>
+		</p>
 	</div>
 	<div class="col-sm-3">
-		<canvas id="status_graph" class="chart chart-doughnut" chart-data="statusData" chart-labels="statusLabels"></canvas> 
+		<canvas id="status_all_graph" class="chart chart-doughnut" chart-data="statusAllData" chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas> 
+		<canvas id="status_closed_graph" class="chart chart-doughnut" chart-data="statusClosedData" chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas> 
 	</div>
 </div>
 <div class="row">

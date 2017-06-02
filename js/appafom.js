@@ -43,13 +43,15 @@ app.factory("GraphData", function() {
 	var service = {};
 
 	service.getFalloutsVsTime = function(data) {
-		var falloutArray = [];
+		var falloutArray = [], 
+		count, 
+		hour;
 
 		for (var i = 0; i < 24; i++) {
-			var count = 0;
+			count = 0;
 
 			angular.forEach(data, function(x) {
-				var hour = x.creation_date.substring(11, 13);
+				hour = x.creation_date.substring(11, 13);
 				if (i == hour) {
 					count++;
 				} 
@@ -61,13 +63,12 @@ app.factory("GraphData", function() {
 		return falloutArray;
 	}
 
-	service.getFieldData = function(data, field) {
-		var fieldArray = [];
+	service.getFieldData = function(data, field, filter) {
+		var fieldArray = [],
+		fieldItem;
 
 		// populate array with error codes
 		angular.forEach(data, function(x) {
-			var fieldItem;
-
 			switch(field) {
 				case "status":
 					fieldItem = x.status;
@@ -82,7 +83,7 @@ app.factory("GraphData", function() {
 					break;
 			}
 
-			if (fieldArray.indexOf(fieldItem) == -1) {
+			if ((fieldArray.indexOf(fieldItem) == -1) && (fieldItem.includes(filter))) {
 				fieldArray.push(fieldItem);
 			}
 		});
@@ -91,14 +92,14 @@ app.factory("GraphData", function() {
 	}
 
 	service.getCountsByCollection = function(data, collection, field) {
-		var counts = [];
+		var counts = [],
+		count,
+		fieldItem;
 
 		angular.forEach(collection, function(x) {
-			var count = 0;
+			count = 0;
 
 			angular.forEach(data, function(y) {
-				var fieldItem;
-
 				switch(field) {
 					case "status":
 						fieldItem = y.status;
@@ -125,9 +126,10 @@ app.factory("GraphData", function() {
 	}
 
 	service.get24hArray = function() {
-		var hours = [];
+		var hours = [],
+		i;
 
-		for (var i = 0; i < 24; i++) {
+		for (i = 0; i < 24; i++) {
 			if (i == 0) {
 				hours.push("12am");
 			} else if (i < 12) {
@@ -164,15 +166,28 @@ app.controller("falloutsCtrl", function ($scope, FalloutData, GraphData) {
 		// async success
 		$scope.fallouts = response.data.docs;
 
+		// TODO move to statistics ctrl
 		$scope.barLabels = GraphData.get24hArray();
 		$scope.barData = [GraphData.getFalloutsVsTime($scope.fallouts)];
 		$scope.barSeries = ["Fallouts at this time"];
 
-		$scope.statusLabels = GraphData.getFieldData($scope.fallouts, "status");
-		$scope.statusData = GraphData.getFalloutsByStatus($scope.fallouts, GraphData.getFieldData($scope.fallouts, "status"), "status");
+		// graph for source system data
+		var sourceSystems = GraphData.getFieldData($scope.fallouts, "source_system", "");
+		$scope.sourceSystemLabels = sourceSystems;
+		$scope.sourceSystemData = GraphData.getCountsByCollection($scope.fallouts, sourceSystems, "source_system");
 
-		$scope.systemLabels = GraphData.getFieldData($scope.fallouts, "source_system");
-		$scope.systemData = GraphData.getFalloutsBySystem($scope.fallouts, GraphData.getFieldData($scope.fallouts, "source_system"), "source_system");
+		 // init graph type as all
+		$scope.statusGraphType = "all";
+		
+		// graph for all status data
+		var statusesAll = GraphData.getFieldData($scope.fallouts, "status", "");
+		$scope.statusAllLabels = statusesAll
+		$scope.statusAllData = GraphData.getCountsByCollection($scope.fallouts, statusesAll, "status");
+		
+		// graph for closed status data
+		var statusesClosed = GraphData.getFieldData($scope.fallouts, "status", "CLOSED");
+		$scope.statusClosedLabels = statusesClosed;
+		$scope.statusClosedData = GraphData.getCountsByCollection($scope.fallouts, statusesClosed, "status");
 	}, function(response) { 
 		// async error
 	});
@@ -180,17 +195,40 @@ app.controller("falloutsCtrl", function ($scope, FalloutData, GraphData) {
 });
 
 // controller for resolutions view
-app.controller("resolutionsCtrl", function ($scope, $http) {
+app.controller("resolutionsCtrl", function ($scope, FalloutData, GraphData) {
 	// table sort data init
 	$scope.sortType	= "id"; 		// set default sort type
 	$scope.sortReverse = false;  	// set default sort order
 	$scope.searchId = "";	 		// set default search/filter term
 
 	// get fallout data from herokuapp api
-	$http.get("https://comptel-api.herokuapp.com/api/resolutions")
+	FalloutData.getData("https://comptel-api.herokuapp.com/api/resolutions")
 	.then(function(response) { 
 		// async success
 		$scope.resolutions = response.data.docs;
+
+		// graph for target system data
+		var targetSystems = GraphData.getFieldData($scope.resolutions, "target_system", "");
+		$scope.targetSystemLabels = targetSystems;
+		$scope.targetSystemData = GraphData.getCountsByCollection($scope.resolutions, targetSystems, "target_system");
+
+		// init graph type as all
+		$scope.statusGraphType = "all";
+
+		// graph for all status data
+		var statusesAll = GraphData.getFieldData($scope.resolutions, "status", "");
+		$scope.statusAllLabels = statusesAll
+		$scope.statusAllData = GraphData.getCountsByCollection($scope.resolutions, statusesAll, "status");
+		
+		// graph for closed status data
+		var statusesClosed = GraphData.getFieldData($scope.resolutions, "status", "CLOSED");
+		$scope.statusClosedLabels = statusesClosed;
+		$scope.statusClosedData = GraphData.getCountsByCollection($scope.resolutions, statusesClosed, "status");
+
+		// graph for retry status data
+		var statusesRetry = GraphData.getFieldData($scope.resolutions, "status", "RETRY");
+		$scope.statusRetryLabels = statusesRetry;
+		$scope.statusRetryData = GraphData.getCountsByCollection($scope.resolutions, statusesRetry, "status");
 	}, function(response) { 
 		// async error
 	});
