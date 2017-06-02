@@ -19,30 +19,22 @@ app.config(function ($routeProvider, $locationProvider) {
 			templateUrl	: "templates/resolutions.html"
 		})
 		.when("/statistics", {
-			templateUrl: "templates/statistics.html"
+			controller	: "statisticsCtrl",
+			templateUrl	: "templates/statistics.html"
 		})
 		.when("/404", {
-			templateUrl: "templates/404.html"
+			templateUrl	: "templates/404.html"
 		})
 		.otherwise ({ // default
-			redirectTo: "404" 
+			redirectTo	: "404" 
 		});
 });
 
-app.factory("FalloutData", function($http) {
-	var service = {};
-
-	service.getData = function(query) {
-		return $http.get(query);
-	};
-
-	return service;
-});
-
+// factory for graph related data
 app.factory("GraphData", function() {
 	var service = {};
 
-	service.getFalloutsVsTime = function(data) {
+	service.getFalloutsVsTime = function (data) {
 		var falloutArray = [], 
 		count, 
 		hour;
@@ -50,7 +42,7 @@ app.factory("GraphData", function() {
 		for (var i = 0; i < 24; i++) {
 			count = 0;
 
-			angular.forEach(data, function(x) {
+			angular.forEach(data, function (x) {
 				hour = x.creation_date.substring(11, 13);
 				if (i == hour) {
 					count++;
@@ -63,12 +55,13 @@ app.factory("GraphData", function() {
 		return falloutArray;
 	}
 
-	service.getFieldData = function(data, field, filter) {
+	// return array of all values of a specific field in a json array, based on a filter
+	service.getFieldData = function (data, field, filter) {
 		var fieldArray = [],
 		fieldItem;
 
 		// populate array with error codes
-		angular.forEach(data, function(x) {
+		angular.forEach(data, function (x) {
 			switch(field) {
 				case "status":
 					fieldItem = x.status;
@@ -91,15 +84,15 @@ app.factory("GraphData", function() {
 		return fieldArray.sort();
 	}
 
-	service.getCountsByCollection = function(data, collection, field) {
+	service.getCountsByCollection = function (data, collection, field) {
 		var counts = [],
 		count,
 		fieldItem;
 
-		angular.forEach(collection, function(x) {
+		angular.forEach(collection, function (x) {
 			count = 0;
 
-			angular.forEach(data, function(y) {
+			angular.forEach(data, function (y) {
 				switch(field) {
 					case "status":
 						fieldItem = y.status;
@@ -125,7 +118,8 @@ app.factory("GraphData", function() {
 		return counts;
 	}
 
-	service.get24hArray = function() {
+	// return array of hours in a day in 12-hour format
+	service.get24hArray = function () {
 		var hours = [],
 		i;
 
@@ -147,22 +141,24 @@ app.factory("GraphData", function() {
 	return service;
 });
 
+app.factory("TimeFormat", function ($http) {
+
+});
+
 app.controller("mainCtrl", function ($scope) {
 
 });
 
 // controller for fallouts view
-app.controller("falloutsCtrl", function ($scope, FalloutData, GraphData) {
+app.controller("falloutsCtrl", function ($scope, $http, GraphData) {
 	// table sort data init
 	$scope.sortType	= "id"; 		// set default sort type
 	$scope.sortReverse = false;		// set default sort order
 	$scope.searchId = "";	 		// set default search/filter term
-
-	// chart data
-	$scope.falloutsPerDay = [];
 	
-	FalloutData.getData("https://comptel-api.herokuapp.com/api/fallouts")
-	.then(function(response) {
+	// get fallout data from herokuapp api
+	$http.get("https://comptel-api.herokuapp.com/api/fallouts")
+	.then(function (response) {
 		// async success
 		$scope.fallouts = response.data.docs;
 
@@ -188,22 +184,21 @@ app.controller("falloutsCtrl", function ($scope, FalloutData, GraphData) {
 		var statusesClosed = GraphData.getFieldData($scope.fallouts, "status", "CLOSED");
 		$scope.statusClosedLabels = statusesClosed;
 		$scope.statusClosedData = GraphData.getCountsByCollection($scope.fallouts, statusesClosed, "status");
-	}, function(response) { 
+	}, function (response) { 
 		// async error
 	});
-	
 });
 
 // controller for resolutions view
-app.controller("resolutionsCtrl", function ($scope, FalloutData, GraphData) {
+app.controller("resolutionsCtrl", function ($scope, $http, GraphData) {
 	// table sort data init
 	$scope.sortType	= "id"; 		// set default sort type
 	$scope.sortReverse = false;  	// set default sort order
 	$scope.searchId = "";	 		// set default search/filter term
 
-	// get fallout data from herokuapp api
-	FalloutData.getData("https://comptel-api.herokuapp.com/api/resolutions")
-	.then(function(response) { 
+	// get resolution data from herokuapp api
+	$http.get("https://comptel-api.herokuapp.com/api/resolutions")
+	.then(function (response) { 
 		// async success
 		$scope.resolutions = response.data.docs;
 
@@ -229,10 +224,38 @@ app.controller("resolutionsCtrl", function ($scope, FalloutData, GraphData) {
 		var statusesRetry = GraphData.getFieldData($scope.resolutions, "status", "RETRY");
 		$scope.statusRetryLabels = statusesRetry;
 		$scope.statusRetryData = GraphData.getCountsByCollection($scope.resolutions, statusesRetry, "status");
-	}, function(response) { 
+	}, function (response) { 
 		// async error
 	});
+});
 
+// controller for statistics view
+app.controller("statisticsCtrl", function ($scope, $http, GraphData) {
+	// get fallout data from herokuapp api
+	$http.get("https://comptel-api.herokuapp.com/api/fallouts")
+	.then(function (falloutResponse) {
+		// async success
+		$scope.fallouts = falloutResponse.data.docs;
+
+		// get resolution data from herokuapp api
+		$http.get("https://comptel-api.herokuapp.com/api/resolutions")
+		.then(function (resolutionResponse) { 
+			// async success
+			$scope.resolutions = resolutionResponse.data.docs;
+
+			// graph for frequency data
+			$scope.freqLabels = GraphData.get24hArray();
+			$scope.freqSeries = ["Fallouts at this time", "Resolutions at this time"];
+			$scope.freqData = [
+				GraphData.getFalloutsVsTime($scope.fallouts),
+				GraphData.getFalloutsVsTime($scope.resolutions)
+			];
+		}, function (resolutionResponse) { 
+			// async error
+		});
+	}, function (falloutResponse) { 
+		// async error
+	});
 
 });
 
