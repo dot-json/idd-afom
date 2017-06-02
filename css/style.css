@@ -1,8 +1,80 @@
+/* glyphicon */
 .glyphicon-big {
 	font-size: 50px;
 	margin-top: 50px;
 }
 
+/* bootstrap */
 .row {
-	margin-bottom: 25px;
+	margin-bottom: 10px;
+}
+
+/* style */
+a {
+	text-decoration: none;
+	color: #5b6770;
+}
+
+h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 25px;
+	font-weight: 600;
+	color: #5b6770;
+}
+
+h2 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 21px;
+	font-weight: 600;
+	color: #5b6770;
+}
+
+h3 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 21px;
+	font-weight: 600;
+	color: #5b6770;
+}
+
+h4, th {
+	font-family: 'Lato', sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	color: #5b6770;
+	text-transform: uppercase;
+}
+
+.text-default {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
+	color: #000000;
+}
+
+.text-hint {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
+	color: #666666;
+}
+
+.navigation-default {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	color: #5b6770;
+	text-transform: uppercase;
+}
+
+.infoarea-title {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	font-weight: 600;
+	color: #b2b9bc;
+}
+
+.infoarea-numbers {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 60px;
+	font-weight: 600;
+	color: #55bf9a;
+	text-transform: uppercase;
 }

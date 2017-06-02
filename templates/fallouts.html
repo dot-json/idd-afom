@@ -36,13 +36,13 @@
 <div class="row">
 	<div class="col-sm-3">
 		<div class="form-group">
-			<label for="input_id">Filter ID:</label>
-			<input type="text" class="form-control" id="input_id" data-ng-model="obj.id" placeholder="AFOM#####" />
+			<label for="input_id" class="text-default">Filter ID:</label>
+			<input type="text" class="form-control" id="input_id" data-ng-model="obj.id" placeholder="AFOM#####" class="text-hint" />
 		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
-			<label for="input_source_system">Filter Source:</label>
+			<label for="input_source_system" class="text-default">Filter Source:</label>
 			<select class="form-control" id="input_source_system" data-ng-model="obj.source_system" >
 				<option></option>
 				<option>COM</option>
@@ -51,19 +51,19 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<label for="input_source_fallout_id">Filter Source ID:</label>
-			<input type="text" class="form-control" id="input_source_fallout_id" data-ng-model="obj.source_fallout_id" placeholder="{{ obj.source_system }}#####" />
+			<label for="input_source_fallout_id" class="text-default">Filter Source ID:</label>
+			<input type="text" class="form-control" id="input_source_fallout_id" data-ng-model="obj.source_fallout_id" placeholder="{{ obj.source_system }}#####" class="text-hint" />
 		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
-			<label for="input_source_error_code">Filter Source Error Code:</label>
-			<input type="text" class="form-control" id="input_source_error_code" data-ng-model="obj.source_error_code" placeholder="ERROR####" />
+			<label for="input_source_error_code" class="text-default">Filter Source Error Code:</label>
+			<input type="text" class="form-control" id="input_source_error_code" data-ng-model="obj.source_error_code" placeholder="ERROR####" class="text-hint" />
 		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
-			<label for="input_status">Filter Status:</label>
+			<label for="input_status" class="text-default">Filter Status:</label>
 			<select class="form-control" id="input_status" data-ng-model="obj.status">
 				<option></option>
 				<option>CREATED</option>
@@ -133,7 +133,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr data-ng-repeat-start="f in fallouts | orderBy:sortType:sortReverse | filter: obj">
+				<tr class="text-default" data-ng-repeat-start="f in fallouts | orderBy:sortType:sortReverse | filter: obj">
 					<td>
 						<button type="button" class="btn btn-default btn-sm" data-ng-if="f.expanded" data-ng-click="f.expanded = false">-</button>
 						<button type="button" class="btn btn-default btn-sm" data-ng-if="!f.expanded" data-ng-click="f.expanded = true">+</button>
@@ -146,7 +146,7 @@
 					<td headers="due_date">{{ f.due_date }}</td>
 					<td headers="status">{{ f.status }}</td>
 				</tr>
-				<tr data-ng-if="f.expanded" data-ng-repeat-end="">
+				<tr class="text-default" data-ng-if="f.expanded" data-ng-repeat-end="">
 					<td></td>
 					<td colspan="7" data-ng-details="{{ f.id }}"></td>
 				</tr>

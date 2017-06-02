@@ -118,6 +118,12 @@ app.factory("GraphData", function() {
 		return counts;
 	}
 
+	return service;
+});
+
+app.factory("TimeFormat", function ($http) {
+	var service = {};
+
 	// return array of hours in a day in 12-hour format
 	service.get24hArray = function () {
 		var hours = [],
@@ -141,10 +147,6 @@ app.factory("GraphData", function() {
 	return service;
 });
 
-app.factory("TimeFormat", function ($http) {
-
-});
-
 app.controller("mainCtrl", function ($scope) {
 
 });
@@ -161,11 +163,6 @@ app.controller("falloutsCtrl", function ($scope, $http, GraphData) {
 	.then(function (response) {
 		// async success
 		$scope.fallouts = response.data.docs;
-
-		// TODO move to statistics ctrl
-		$scope.barLabels = GraphData.get24hArray();
-		$scope.barData = [GraphData.getFalloutsVsTime($scope.fallouts)];
-		$scope.barSeries = ["Fallouts at this time"];
 
 		// graph for source system data
 		var sourceSystems = GraphData.getFieldData($scope.fallouts, "source_system", "");
@@ -230,7 +227,7 @@ app.controller("resolutionsCtrl", function ($scope, $http, GraphData) {
 });
 
 // controller for statistics view
-app.controller("statisticsCtrl", function ($scope, $http, GraphData) {
+app.controller("statisticsCtrl", function ($scope, $http, GraphData, TimeFormat) {
 	// get fallout data from herokuapp api
 	$http.get("https://comptel-api.herokuapp.com/api/fallouts")
 	.then(function (falloutResponse) {
@@ -243,8 +240,27 @@ app.controller("statisticsCtrl", function ($scope, $http, GraphData) {
 			// async success
 			$scope.resolutions = resolutionResponse.data.docs;
 
+			// quantity data
+			$scope.falloutCount = $scope.fallouts.length;
+			$scope.resolutionCount = $scope.resolutions.length;
+
+			var retryCount = 0, 
+			retrySuccessCount = 0;
+
+			angular.forEach($scope.resolutions, function (x) {
+				if (x.status.includes("RETRY")) {
+					retryCount++;
+
+					if (x.status.includes("SUCCESS")) {
+						retrySuccessCount++;
+					}
+				}
+			});
+
+			$scope.retrySuccessRate = retrySuccessCount * 100 / retryCount;
+
 			// graph for frequency data
-			$scope.freqLabels = GraphData.get24hArray();
+			$scope.freqLabels = TimeFormat.get24hArray();
 			$scope.freqSeries = ["Fallouts at this time", "Resolutions at this time"];
 			$scope.freqData = [
 				GraphData.getFalloutsVsTime($scope.fallouts),

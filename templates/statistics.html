@@ -1,6 +1,27 @@
 <div class="row">
 	<div class="col-sm-12">
 		<div class="page-header">
+			<h1>Summary</h1>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-2 col-sm-offset-3">
+		<p class="infoarea-numbers text-center">{{ falloutCount }}</p>
+		<p class="infoarea-title text-center">total fallouts detected</p>
+	</div>
+	<div class="col-sm-2">
+		<p class="infoarea-numbers text-center">{{ resolutionCount }}</p>
+		<p class="infoarea-title text-center">total resolutions orchestrated</p>
+	</div>
+	<div class="col-sm-2">
+		<p class="infoarea-numbers text-center">{{ retrySuccessRate | number : 0 }}%</p>
+		<p class="infoarea-title text-center">retry success rate</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="page-header">
 			<h1>Statistics</h1>
 		</div>
 	</div>
@@ -11,24 +32,6 @@
 		<p>Frequency bar graph showing when fallouts and resolutions are detected throughout the day</p>
 	</div>
 	<div class="col-sm-8">
-		<canvas id="freq" class="chart chart-bar" chart-data="freqData" chart-labels="freqLabels" chart-series="freqSeries"></canvas>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-6">
-		<!-- Detected -->
-	</div>
-	<div class="col-sm-6">
-		<!-- Resolved -->
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<!-- Fallout Frequency Graph -->
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<!-- Pie Chart -->
+		<canvas id="freq_graph" class="chart chart-bar" chart-data="freqData" chart-labels="freqLabels" chart-series="freqSeries"></canvas>
 	</div>
 </div>
