@@ -11,7 +11,7 @@
 		<p>Hollow pie graph showing resolutions grouped by target system</p>
 	</div>
 	<div class="col-sm-3">
-		<canvas id="target_system_graph" class="chart chart-doughnut" chart-data="targetSystemData" chart-labels="targetSystemLabels"></canvas> 
+		<canvas id="target_system_graph" class="chart chart-doughnut" data-chart-data="targetSystemData" data-chart-labels="targetSystemLabels"></canvas>
 	</div>
 	<div class="col-sm-3">
 		<h2>Resolutions By Status</h2>
@@ -23,9 +23,9 @@
 		</p>
 	</div>
 	<div class="col-sm-3">
-		<canvas id="status_all_graph" class="chart chart-doughnut" chart-data="statusAllData" chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas> 
-		<canvas id="status_closed_graph" class="chart chart-doughnut" chart-data="statusClosedData" chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas>
-		<canvas id="status_retry_graph" class="chart chart-doughnut" chart-data="statusRetryData" chart-labels="statusRetryLabels" data-ng-if="statusGraphType=='retry'"></canvas>  
+		<canvas id="status_all_graph" class="chart chart-doughnut" data-chart-data="statusAllData" data-chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas>
+		<canvas id="status_closed_graph" class="chart chart-doughnut" data-chart-data="statusClosedData" data-chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas>
+		<canvas id="status_retry_graph" class="chart chart-doughnut" data-chart-data="statusRetryData" data-chart-labels="statusRetryLabels" data-ng-if="statusGraphType=='retry'"></canvas>
 	</div>
 </div>
 <div class="row">

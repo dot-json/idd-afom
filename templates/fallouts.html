@@ -13,7 +13,7 @@
 				<p>Hollow pie graph showing fallouts grouped by source system</p>
 			</div>
 			<div class="col-sm-6">
-				<canvas id="source_system_graph" class="chart chart-doughnut" chart-data="sourceSystemData" chart-labels="sourceSystemLabels"></canvas> 
+				<canvas id="source_system_graph" class="chart chart-doughnut" data-chart-data="sourceSystemData" data-chart-labels="sourceSystemLabels"></canvas>
 			</div>
 		</div>
 	</div>
@@ -28,8 +28,8 @@
 				</p>
 			</div>
 			<div class="col-sm-6">
-				<canvas id="status_all_graph" class="chart chart-doughnut" chart-data="statusAllData" chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas> 
-				<canvas id="status_closed_graph" class="chart chart-doughnut" chart-data="statusClosedData" chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas> 
+				<canvas id="status_all_graph" class="chart chart-doughnut" data-chart-data="statusAllData" data-chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas>
+				<canvas id="status_closed_graph" class="chart chart-doughnut" data-chart-data="statusClosedData" data-chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas>
 			</div>
 		</div>
 	</div>
@@ -45,7 +45,7 @@
 	<div class="col-sm-3">
 		<div class="form-group">
 			<label for="input_id" class="text-default">Filter ID:</label>
-			<input type="text" class="form-control" id="input_id" data-ng-model="obj.id" placeholder="AFOM#####" class="text-hint" />
+			<input type="text" class="form-control text-hint" id="input_id" data-ng-model="obj.id" placeholder="AFOM#####" />
 		</div>
 	</div>
 	<div class="col-sm-3">
@@ -60,13 +60,13 @@
 		</div>
 		<div class="form-group">
 			<label for="input_source_fallout_id" class="text-default">Filter Source ID:</label>
-			<input type="text" class="form-control" id="input_source_fallout_id" data-ng-model="obj.source_fallout_id" placeholder="{{ obj.source_system }}#####" class="text-hint" />
+			<input type="text" class="form-control text-hint" id="input_source_fallout_id" data-ng-model="obj.source_fallout_id" placeholder="{{ obj.source_system }}#####" />
 		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
 			<label for="input_source_error_code" class="text-default">Filter Source Error Code:</label>
-			<input type="text" class="form-control" id="input_source_error_code" data-ng-model="obj.source_error_code" placeholder="ERROR####" class="text-hint" />
+			<input type="text" class="form-control text-hint" id="input_source_error_code" data-ng-model="obj.source_error_code" placeholder="ERROR####" />
 		</div>
 	</div>
 	<div class="col-sm-3">
