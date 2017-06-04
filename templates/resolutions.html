@@ -149,8 +149,8 @@
 					<td headers="source_fallout_id">{{ r.source_fallout_id }}</td>
 					<td headers="action_id">{{ r.action_id }}</td>
 					<td headers="target_system">{{ r.target_system }}</td>
-					<td headers="creation_date">{{ r.creation_date }}</td>
-					<td headers="due_date">{{ r.due_date }}</td>
+					<td headers="creation_date">{{ r.creation_date | splitDateTime }}</td>
+					<td headers="due_date">{{ r.due_date | splitDateTime }}</td>
 					<td headers="status">{{ r.status }}</td>
 					<td headers="retry_count" ><span class="pull-right">{{ r.retry_count }}</span></td>
 				</tr>

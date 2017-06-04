@@ -3,27 +3,28 @@ var app = angular.module("myApp", ["ngRoute", "chart.js"]);
 
 // config views
 app.config(function ($routeProvider, $locationProvider) {
-	$locationProvider.hashPrefix("!");
+	$locationProvider.hashPrefix("");
 
 	// routes
 	$routeProvider
 		.when("/", {
-			templateUrl: "templates/home.html"
+			controller	: "dashboardCtrl",
+			templateUrl	: "templates/dashboard.html",
+			activetab 	: 'dashboard'
 		})
 		.when("/fallouts", {
 			controller	: "falloutsCtrl",
-			templateUrl	: "templates/fallouts.html"
+			templateUrl	: "templates/fallouts.html",
+			activetab: 'fallouts'
 		})
 		.when("/resolutions", {
 			controller	: "resolutionsCtrl",
-			templateUrl	: "templates/resolutions.html"
-		})
-		.when("/statistics", {
-			controller	: "statisticsCtrl",
-			templateUrl	: "templates/statistics.html"
+			templateUrl	: "templates/resolutions.html",
+			activetab: 'resolutions'
 		})
 		.when("/404", {
-			templateUrl	: "templates/404.html"
+			templateUrl	: "templates/404.html",
+			activetab: '404'
 		})
 		.otherwise ({ // default
 			redirectTo	: "404" 
@@ -147,12 +148,14 @@ app.factory("TimeFormat", function ($http) {
 	return service;
 });
 
-app.controller("mainCtrl", function ($scope) {
-
+app.controller("mainCtrl", function ($scope, $route) {
 });
 
 // controller for fallouts view
-app.controller("falloutsCtrl", function ($scope, $http, GraphData) {
+app.controller("falloutsCtrl", function ($scope, $route, $http, GraphData) {
+	// store route data for navbar config
+	$scope.activeTab = $route.current.activetab;
+
 	// table sort data init
 	$scope.sortType	= "id"; 		// set default sort type
 	$scope.sortReverse = false;		// set default sort order
@@ -187,7 +190,10 @@ app.controller("falloutsCtrl", function ($scope, $http, GraphData) {
 });
 
 // controller for resolutions view
-app.controller("resolutionsCtrl", function ($scope, $http, GraphData) {
+app.controller("resolutionsCtrl", function ($scope, $route, $http, GraphData) {
+	// store route data for navbar config
+	$scope.activeTab = $route.current.activetab;
+
 	// table sort data init
 	$scope.sortType	= "id"; 		// set default sort type
 	$scope.sortReverse = false;  	// set default sort order
@@ -226,8 +232,11 @@ app.controller("resolutionsCtrl", function ($scope, $http, GraphData) {
 	});
 });
 
-// controller for statistics view
-app.controller("statisticsCtrl", function ($scope, $http, GraphData, TimeFormat) {
+// controller for dashboard view
+app.controller("dashboardCtrl", function ($scope, $route, $http, GraphData, TimeFormat) {
+	// store route data for navbar config
+	$scope.activeTab = $route.current.activetab;
+
 	// get fallout data from herokuapp api
 	$http.get("https://comptel-api.herokuapp.com/api/fallouts")
 	.then(function (falloutResponse) {
@@ -296,10 +305,9 @@ app.directive("ngDetails", function ($parse, $http) {
 	};
 });
 
-// TODO
 // formats datetime as "yyyy-mm-dd hh-mm-ss"
-app.filter('split', function() {
-	return function(input, splitChar, splitIndex) {
-		return input.split(splitChar)[splitIndex];
-	}
+app.filter('splitDateTime', function() {
+	return function (toConvert) {
+		return toConvert.substring(0, 10) + " " + toConvert.substring(11, 19);
+	};
 });

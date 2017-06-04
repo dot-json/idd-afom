@@ -6,24 +6,32 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-3">
-		<h2>Fallouts By Source System</h2>
-		<p>Hollow pie graph showing fallouts grouped by source system</p>
+	<div class="col-sm-6">
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>Fallouts By Source System</h2>
+				<p>Hollow pie graph showing fallouts grouped by source system</p>
+			</div>
+			<div class="col-sm-6">
+				<canvas id="source_system_graph" class="chart chart-doughnut" chart-data="sourceSystemData" chart-labels="sourceSystemLabels"></canvas> 
+			</div>
+		</div>
 	</div>
-	<div class="col-sm-3">
-		<canvas id="source_system_graph" class="chart chart-doughnut" chart-data="sourceSystemData" chart-labels="sourceSystemLabels"></canvas> 
-	</div>
-	<div class="col-sm-3">
-		<h2>Fallouts By Status</h2>
-		<p>Hollow pie graph showing fallouts grouped by {{ statusGraphType }} statuses</p>
-		<p>
-			<button type="button" class="btn btn-default" data-ng-click="statusGraphType='all'">All</button>
-			<button type="button" class="btn btn-default" data-ng-click="statusGraphType='closed'">Closed</button>
-		</p>
-	</div>
-	<div class="col-sm-3">
-		<canvas id="status_all_graph" class="chart chart-doughnut" chart-data="statusAllData" chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas> 
-		<canvas id="status_closed_graph" class="chart chart-doughnut" chart-data="statusClosedData" chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas> 
+	<div class="col-sm-6">
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>Fallouts By Status</h2>
+				<p>Hollow pie graph showing fallouts grouped by {{ statusGraphType }} statuses</p>
+				<p>
+					<button type="button" class="btn btn-default" data-ng-click="statusGraphType='all'">All</button>
+					<button type="button" class="btn btn-default" data-ng-click="statusGraphType='closed'">Closed</button>
+				</p>
+			</div>
+			<div class="col-sm-6">
+				<canvas id="status_all_graph" class="chart chart-doughnut" chart-data="statusAllData" chart-labels="statusAllLabels" data-ng-if="statusGraphType=='all'"></canvas> 
+				<canvas id="status_closed_graph" class="chart chart-doughnut" chart-data="statusClosedData" chart-labels="statusClosedLabels" data-ng-if="statusGraphType=='closed'"></canvas> 
+			</div>
+		</div>
 	</div>
 </div>
 <div class="row">
@@ -142,8 +150,8 @@
 					<td headers="source_system">{{ f.source_system }}</td>
 					<td headers="source_fallout_id">{{ f.source_fallout_id }}</td>
 					<td headers="source_error_code">{{ f.source_error_code }}</td>
-					<td headers="creation_date">{{ f.creation_date }}</td>
-					<td headers="due_date">{{ f.due_date }}</td>
+					<td headers="creation_date">{{ f.creation_date | splitDateTime }}</td>
+					<td headers="due_date">{{ f.due_date | splitDateTime }}</td>
 					<td headers="status">{{ f.status }}</td>
 				</tr>
 				<tr class="text-default" data-ng-if="f.expanded" data-ng-repeat-end="">
